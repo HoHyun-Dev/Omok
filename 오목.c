@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <conio.h>
-#define size 20
+#define size 16
 
 #define LEFT 75
 #define RIGHT 77
@@ -13,21 +13,21 @@ void gotoxy(int x, int y);							//커서의 좌표를 옮기는 함수
 void clearStatusBar(void);							//오목판 밑의 상태창을 지우는 함수
 void ShowCursorPos(int x, int y, char ch, int trig);//커서가 가리키는 위치를 표시하는 함수
 void TurnChange(char *ptr);							//왼쪽 위에 표시되는 턴을 바꾸는 함수
-void ShowPlate(char(*plate)[20]);					//오목판을 보여주는 함수
+void ShowPlate(char(*plate)[16]);					//오목판을 보여주는 함수
 int Win(char c);									//이겼을 때 출력하는 함수
-int WinOrNot(char plate[][20], int y, int x);		//끝났는지 아닌지 판단하는 함수
-int move(char plate[][20]);							//이동과 돌 놓기를 구현한 함수
+int WinOrNot(char plate[][16], int y, int x);		//끝났는지 아닌지 판단하는 함수
+int move(char plate[][16]);							//이동과 돌 놓기를 구현한 함수
 int main(void)
 {
 	HANDLE hnd = GetStdHandle(STD_OUTPUT_HANDLE);
-	char plate[20][20];					//오목판 배열
+	char plate[16][16];					//오목판 배열
 	int x, y;
 	int trig = 0;
 
-	for(x=1; x<size; x++)				//1부터 19까지 
-		plate[0][x] = x;				//제일 윗줄에 1~19 순서대로 대입
-	for(y=1; y<size; y++)				//1부터 19까지
-		plate[y][0] = y;				//제일 왼쪽에 1~19 순서대로 대입
+	for(x=1; x<size; x++)				//1부터 15까지 
+		plate[0][x] = x;				//제일 윗줄에 1~15 순서대로 대입
+	for(y=1; y<size; y++)				//1부터 15까지
+		plate[y][0] = y;				//제일 왼쪽에 1~15 순서대로 대입
 	for(x=1; x<size; x++)
 		for(y=1; y<size; y++)
 			plate[y][x] = '.';			//나머지는 다 .으로 채움
@@ -140,7 +140,7 @@ void TurnChange(char *ptr)
 
 	SetConsoleTextAttribute(hnd, 0x0F);		//배경과 글자색 복구(검정색, 흰색)
 }
-void ShowPlate(char(*plate)[20])
+void ShowPlate(char(*plate)[16])
 {
 	/*
 	오목판을 보여주는 함수
@@ -160,7 +160,7 @@ void ShowPlate(char(*plate)[20])
 
 	SetConsoleTextAttribute(hnd, 0x8F);	//배경과 글자색 바꿈(짙은 회색, 검정)
 	for (x = 1; x < size; x++)
-		printf("%2d ", x);				//1부터 size(20) 전까지 숫자로 출력
+		printf("%2d ", x);				//1부터 size(26) 전까지 숫자로 출력
 	putchar('\n');
 
 	for (y = 1; y < size; y++)
@@ -200,7 +200,7 @@ int Win(char c)
 
 	return 1;
 }
-int WinOrNot(char plate[][20], int y, int x)
+int WinOrNot(char plate[][16], int y, int x)
 {
 	/*
 	끝났는지 아닌지 판단하는 함수
@@ -268,7 +268,7 @@ int WinOrNot(char plate[][20], int y, int x)
 	}
 	return 0;
 }
-int move(char plate[][20])
+int move(char plate[][16])
 {
 	/*
 	이동과 돌 놓기를 구현한 함수
@@ -321,7 +321,7 @@ int move(char plate[][20])
 
 			if (WinOrNot(plate, y, x / 3))		//만약 게임이 끝났으면
 			{
-				gotoxy(0, 20);
+				gotoxy(0, 16);
 				Win(plate[0][0]);				//Win() 실행
 				return -1;						//-1 반환
 			}
