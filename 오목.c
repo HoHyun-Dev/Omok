@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <conio.h>
-#define size 16
+#define size 16 //오목판 정규 크기인 15X15로 바꿈
 
-#define LEFT 75
+//상하좌우 상수값 설정
+#define LEFT 75 
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
@@ -12,7 +13,7 @@
 void gotoxy(int x, int y);							//커서의 좌표를 옮기는 함수
 void clearStatusBar(void);							//오목판 밑의 상태창을 지우는 함수
 void ShowCursorPos(int x, int y, char ch, int trig);//커서가 가리키는 위치를 표시하는 함수
-void TurnChange(char *ptr);							//왼쪽 위에 표시되는 턴을 바꾸는 함수
+void TurnChange(char* ptr);							//왼쪽 위에 표시되는 턴을 바꾸는 함수
 void ShowPlate(char(*plate)[16]);					//오목판을 보여주는 함수
 int Win(char c);									//이겼을 때 출력하는 함수
 int WinOrNot(char plate[][16], int y, int x);		//끝났는지 아닌지 판단하는 함수
@@ -24,18 +25,18 @@ int main(void)
 	int x, y;
 	int trig = 0;
 
-	for(x=1; x<size; x++)				//1부터 15까지 
-		plate[0][x] = x;				//제일 윗줄에 1~15 순서대로 대입
-	for(y=1; y<size; y++)				//1부터 15까지
-		plate[y][0] = y;				//제일 왼쪽에 1~15 순서대로 대입
-	for(x=1; x<size; x++)
-		for(y=1; y<size; y++)
+	for (x = 1; x < size; x++)				//1부터 19까지 
+		plate[0][x] = x;				//제일 윗줄에 1~19 순서대로 대입
+	for (y = 1; y < size; y++)				//1부터 19까지
+		plate[y][0] = y;				//제일 왼쪽에 1~19 순서대로 대입
+	for (x = 1; x < size; x++)
+		for (y = 1; y < size; y++)
 			plate[y][x] = '.';			//나머지는 다 .으로 채움
 
 	plate[0][0] = 'O';					//턴은 O 먼저 시작
 	ShowPlate(plate);					//오목판을 보여줌
 	gotoxy(10 * 3 + 1, 10);				//(10, 10) 지점으로 커서 이동
-	while(1)
+	while (1)
 	{
 		trig = move(plate);				//트리거에 move()가 반환한 값 저장
 		clearStatusBar();
@@ -59,7 +60,6 @@ void gotoxy(int x, int y)
 {
 	/*
 	커서의 좌표를 옮기는 함수
-
 	옮길 x좌포와 y좌표를 인자로 받음
 	*/
 	COORD pos = { x, y };				//x와 y좌표를 구조체에 할당
@@ -82,7 +82,6 @@ void ShowCursorPos(int x, int y, char ch, int trig)
 {
 	/*
 	커서가 가리키는 위치를 표시하는 함수
-
 	x, y좌표와 그 좌표에 출력되는 문자, 표시 생성/삭제 여부 트리거를 인자로 받음
 	*/
 	static HANDLE hnd;
@@ -118,11 +117,10 @@ void ShowCursorPos(int x, int y, char ch, int trig)
 		SetConsoleTextAttribute(hnd, 0x0F);		//배경, 글자색 복구(검정, 햐양)
 	}
 }
-void TurnChange(char *ptr)
+void TurnChange(char* ptr)
 {
 	/*
 	왼쪽 위에 표시되는 턴을 바꾸는 함수
-
 	오목판 왼쪽 위의 좌표를 인자로 받음
 	*/
 	static HANDLE hnd;
@@ -144,7 +142,6 @@ void ShowPlate(char(*plate)[16])
 {
 	/*
 	오목판을 보여주는 함수
-
 	오목판 배열을 인자로 받음
 	*/
 	int x, y;
@@ -160,7 +157,7 @@ void ShowPlate(char(*plate)[16])
 
 	SetConsoleTextAttribute(hnd, 0x8F);	//배경과 글자색 바꿈(짙은 회색, 검정)
 	for (x = 1; x < size; x++)
-		printf("%2d ", x);				//1부터 size(26) 전까지 숫자로 출력
+		printf("%2d ", x);				//1부터 size(16) 전까지 숫자로 출력
 	putchar('\n');
 
 	for (y = 1; y < size; y++)
@@ -179,7 +176,6 @@ int Win(char c)
 {
 	/*
 	이겼을 때 출력하는 함수
-
 	이긴 플레이어(O 또는 X)를 인자로 받음
 	*/
 	HANDLE hnd = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -204,7 +200,6 @@ int WinOrNot(char plate[][16], int y, int x)
 {
 	/*
 	끝났는지 아닌지 판단하는 함수
-
 	오목판과 y, x좌표를 인자로 받음
 	끝났을 경우 1, 아니면 0을 반환
 	*/
@@ -272,7 +267,6 @@ int move(char plate[][16])
 {
 	/*
 	이동과 돌 놓기를 구현한 함수
-
 	오목판 배열을 인자로 받음
 	게임이 끝났으면 -1, 잘못된 좌표를 선택하면 1, 정상적이면 0 반환
 	*/
@@ -282,6 +276,7 @@ int move(char plate[][16])
 	static int y = 10;
 	static HANDLE hnd;
 	hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	static int drawCnt = 0; // 모든칸을 채워 비긴 경우를 카운트
 
 	while (1)
 	{
@@ -324,20 +319,28 @@ int move(char plate[][16])
 				gotoxy(0, 16);
 				Win(plate[0][0]);				//Win() 실행
 				return -1;						//-1 반환
+
 			}
 			else								//끝나지 않았으면
 			{
-				return 0;						//0 반환
+				if (drawCnt == (size - 1) * (size - 1))
+				{
+					gotoxy(0, 16);
+					SetConsoleTextAttribute(hnd, 0x02);//배경과 글자색 바꿈(검정,초록)
+
+					printf("비겼습니다\n"); // 칸이 다 차면 비김
+				}
+				return 0;
 			}
 		}
 
 		if (x < 1 * 3)							//커서가 왼쪽 경계를 넘어가면
-			x = 19 * 3;							//오른쪽 끝으로 이동
-		else if (x > 19 * 3)					//커서가 오른쪽 경계를 넘어가면
+			x = 15 * 3;							//오른쪽 끝으로 이동
+		else if (x > 15 * 3)					//커서가 오른쪽 경계를 넘어가면
 			x = 1 * 3;							//왼쪽 끝으로 이동
 		if (y < 1)								//커서가 위쪽 경계를 넘어가면
-			y = 19;								//아래쪽 끝으로 이동
-		else if (y > 19)						//커서가 아래쪽 경계를 넘어가면
+			y = 15;								//아래쪽 끝으로 이동
+		else if (y > 15)						//커서가 아래쪽 경계를 넘어가면
 			y = 1;								//위쪽 끝으로 이동
 	}
 }
