@@ -310,6 +310,7 @@ int move(char plate[][16])
 				return 1;						//1을 반환해 오류 메세지 출력 트리거 활성화
 			else								//비어있으면
 			{
+				drawCnt++; // 칸 수를 셈
 				plate[y][x / 3] = plate[0][0];  //돌을 놓음
 				ShowCursorPos(x, y, plate[y][x / 3], 0);
 			}
