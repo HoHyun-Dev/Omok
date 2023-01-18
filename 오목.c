@@ -25,10 +25,10 @@ int main(void)
 	int x, y;
 	int trig = 0;
 
-	for (x = 1; x < size; x++)				//1부터 19까지 
-		plate[0][x] = x;				//제일 윗줄에 1~19 순서대로 대입
+	for (x = 1; x < size; x++)				//1부터 15까지 
+		plate[0][x] = x;				//제일 윗줄에 1~15 순서대로 대입
 	for (y = 1; y < size; y++)				//1부터 19까지
-		plate[y][0] = y;				//제일 왼쪽에 1~19 순서대로 대입
+		plate[y][0] = y;				//제일 왼쪽에 1~15 순서대로 대입
 	for (x = 1; x < size; x++)
 		for (y = 1; y < size; y++)
 			plate[y][x] = '.';			//나머지는 다 .으로 채움
@@ -194,7 +194,10 @@ int Win(char c)
 	SetConsoleTextAttribute(hnd, 0x0F); //배경색과 글자색 복구(검정, 하양)
 	putchar('\n');
 
-	return 1;
+	Sleep(5000);
+
+
+	return main(); //이기면 다시 시작
 }
 int WinOrNot(char plate[][16], int y, int x)
 {
