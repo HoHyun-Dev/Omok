@@ -27,7 +27,7 @@ int main(void)
 
 	for (x = 1; x < size; x++)				//1부터 15까지 
 		plate[0][x] = x;				//제일 윗줄에 1~15 순서대로 대입
-	for (y = 1; y < size; y++)				//1부터 19까지
+	for (y = 1; y < size; y++)				//1부터 15까지
 		plate[y][0] = y;				//제일 왼쪽에 1~15 순서대로 대입
 	for (x = 1; x < size; x++)
 		for (y = 1; y < size; y++)
@@ -47,6 +47,7 @@ int main(void)
 			gotoxy(0, 21);				//출력할 장소로 이동한 뒤
 			SetConsoleTextAttribute(hnd, 0x04);//배경, 글자색 변경(검정, 진한 빨강)
 			printf("잘못된 좌표입니다! \n");//오류 메세지 출력
+			TurnChange(&plate[0][0]); //같은 좌표에 두면 턴이안바뀌게 수정
 			SetConsoleTextAttribute(hnd, 0x0F);//배경, 글자색 복구(검정, 하양)
 			trig = 0;					//트리거 비활성화
 			break;
